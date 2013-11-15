@@ -1,6 +1,9 @@
 OauthProviderDemo::Application.routes.draw do
-  devise_for :users, :controllers => { :registrations => 'registrations',
-                                       :sessions => 'sessions'}
+
+  devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks",
+                                       :registrations => 'registrations',
+                                       :sessions => 'sessions' }
+
   # omniauth client stuff
   match '/auth/:provider/callback', :to => 'authentications#create'
   match '/auth/failure', :to => 'authentications#failure'

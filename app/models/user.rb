@@ -4,12 +4,34 @@ class User < ActiveRecord::Base
 
   before_validation :initialize_fields, :on => :create
 
-  devise :database_authenticatable, :registerable, :token_authenticatable,
-         :recoverable, :timeoutable, :trackable, :validatable, :rememberable
+  devise :token_authenticatable, :database_authenticatable
 
-  self.token_authentication_key = "oauth_token"
+  devise :omniauthable, :omniauth_providers => [:google]
 
   attr_accessible :email, :password, :password_confirmation, :remember_me, :first_name, :last_name
+
+  def self.find_for_open_id(access_token, signed_in_resource=nil)
+    data = access_token.info
+    identity_url = access_token.extra['response'].identity_url
+    if user = User.where(:identity_url => identity_url).first
+      # We found the user record by means of the identity_url, all is good
+      user
+    elsif user = User.where(:email => data["email"]).first
+      # User record exists, but the identity_url does not match
+      # This is fishy. Politely decline access.
+      raise "Identity_url mismatch"
+    else
+      # New user
+      # identity_url is deliberately not in attr_accessible to avoid shenanigans, so assign
+      # it explicitly. Ward, 2012-08-29
+      user = User.new(:email => data["email"], :password => Devise.friendly_token[0,20])
+      user.identity_url = identity_url
+      user.save!
+      user
+    end
+  end
+
+  self.token_authentication_key = "oauth_token"
 
   def apply_omniauth(omniauth)
     authentications.build(:provider => omniauth['provider'], :uid => omniauth['uid'])

@@ -2,6 +2,7 @@ source 'http://rubygems.org'
 
 gem 'rails', '3.2.8'
 gem 'sqlite3'
+gem 'therubyracer'
 
 # asset pipeline
 group :assets do
@@ -15,3 +16,4 @@ gem 'jquery-rails'
 # gems for omniauth and devise
 gem 'devise'
 gem 'omniauth'
+gem 'omniauth-openid'
