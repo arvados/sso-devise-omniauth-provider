@@ -2,14 +2,10 @@ class AuthController < ApplicationController
   before_filter :authenticate_user!, :except => [:access_token]
   skip_before_filter :verify_authenticity_token, :only => [:access_token]
 
-  def welcome
-    render :text => "Hiya! #{current_user.first_name} #{current_user.last_name}"
-  end
-
   def authorize
     AccessGrant.prune!
     access_grant = current_user.access_grants.create({:client => application, :state => params[:state]}, :without_protection => true)
-    redirect_to access_grant.redirect_uri_for(params[:redirect_uri])
+    redirect_to access_grant.redirect_uri_for(params[:redirect_uri],params[:state])
   end
 
   def access_token
@@ -40,10 +36,15 @@ class AuthController < ApplicationController
       :id => current_user.id.to_s,
       :info => {
          :email      => current_user.email,
+         :first_name => current_user.first_name,
+         :last_name  => current_user.last_name,
+         :identity_url => current_user.identity_url
       },
       :extra => {
          :first_name => current_user.first_name,
-         :last_name  => current_user.last_name
+         :last_name  => current_user.last_name,
+         :email => current_user.email,
+         :identity_url => current_user.identity_url
       }
     }
 
