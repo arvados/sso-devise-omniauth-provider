@@ -14,6 +14,6 @@ end
 gem 'jquery-rails'
 
 # gems for omniauth and devise
-gem 'devise'
+gem 'devise', '2.2.8'
 gem 'omniauth'
 gem 'omniauth-openid'
