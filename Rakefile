@@ -4,4 +4,4 @@
 require File.expand_path('../config/application', __FILE__)
 require 'rake'
 
-OauthProviderDemo::Application.load_tasks
+CfiOauthProvider::Application.load_tasks
