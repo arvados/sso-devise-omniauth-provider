@@ -12,9 +12,8 @@ class SessionsController < Devise::SessionsController
     if session[:user_return_to].nil? or session[:user_return_to].match('^/auth/').nil? then
       respond_with(resource, serialize_options(resource))
     else
-      redirect_to '/users/auth/google'
+      redirect_to "/users/auth/#{session[:auth_method]}"
     end
   end
 
 end
-

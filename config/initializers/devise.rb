@@ -173,5 +173,5 @@ Devise.setup do |config|
   require 'openid/store/filesystem'
   config.omniauth :open_id, :store => OpenID::Store::Filesystem.new('./tmp_omniauth'), :name => 'google', :identifier => 'https://www.google.com/accounts/o8/id', :require => 'omniauth-openid'
 
-  config.omniauth :google_oauth2, config.google_client_id, config.google_client_secret, {}
+  config.omniauth :google_oauth2, CfiOauthProvider::Application.config.google_client_id, CfiOauthProvider::Application.config.google_client_secret, {}
 end

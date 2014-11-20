@@ -1,6 +1,11 @@
 class AuthController < ApplicationController
+  before_filter :save_auth_method
   before_filter :authenticate_user!, :except => [:access_token]
   skip_before_filter :verify_authenticity_token, :only => [:access_token]
+
+  def save_auth_method
+    session[:auth_method] = params[:auth_method]
+  end
 
   def authorize
     AccessGrant.prune!

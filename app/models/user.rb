@@ -6,17 +6,15 @@ class User < ActiveRecord::Base
 
   devise :token_authenticatable, :database_authenticatable
 
-  devise :omniauthable, :omniauth_providers => [:google]
+  devise :omniauthable, :omniauth_providers => [:google, :google_oauth2]
 
   attr_accessible :email, :password, :password_confirmation, :remember_me, :first_name, :last_name
 
-  def self.find_for_open_id(access_token, signed_in_resource=nil)
-    data = access_token.info
-    identity_url = access_token.extra['response'].identity_url
+  def self.find_for_identity(email, identity_url, signed_in_resource=nil)
     if user = User.where(:identity_url => identity_url).first
       # We found the user record by means of the identity_url, all is good
       user
-    elsif user = User.where(:email => data["email"]).first
+    elsif user = User.where(:email => email).first
       # User record exists, but the identity_url does not match
       # This is fishy. Politely decline access.
       raise "Identity_url mismatch"
@@ -24,7 +22,7 @@ class User < ActiveRecord::Base
       # New user
       # identity_url is deliberately not in attr_accessible to avoid shenanigans, so assign
       # it explicitly. Ward, 2012-08-29
-      user = User.new(:email => data["email"], :password => Devise.friendly_token[0,20])
+      user = User.new(:email => email, :password => Devise.friendly_token[0,20])
       user.identity_url = identity_url
       user.save!
       user
@@ -40,7 +38,7 @@ class User < ActiveRecord::Base
   def self.find_for_token_authentication(conditions)
     where(["access_grants.access_token = ? AND (access_grants.access_token_expires_at IS NULL OR access_grants.access_token_expires_at > ?)", conditions[token_authentication_key], Time.now]).joins(:access_grants).select("users.*").first
   end
-  
+
   def initialize_fields
     self.status = "Active"
     self.expiration_date = 1.year.from_now
