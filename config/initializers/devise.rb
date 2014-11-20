@@ -165,10 +165,13 @@ Devise.setup do |config|
   #   manager.failure_app = AnotherApp
   #   manager.default_strategies(:scope => :user).unshift :some_external_strategy
   # end
-  
+
   #config.warden do |manager|
     #manager.default_strategies(:scope => :user).unshift(:custom_database_authenticatable)
   #end
+
   require 'openid/store/filesystem'
   config.omniauth :open_id, :store => OpenID::Store::Filesystem.new('./tmp_omniauth'), :name => 'google', :identifier => 'https://www.google.com/accounts/o8/id', :require => 'omniauth-openid'
+
+  config.omniauth :google_oauth2, config.google_client_id, config.google_client_secret, {}
 end
