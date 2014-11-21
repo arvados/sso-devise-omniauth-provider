@@ -3,10 +3,15 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   skip_before_filter :verify_authenticity_token, :only => [:google, :google_oauth2]
 
   def google
+    begin
     @user = User.find_for_identity(request.env['omniauth.auth']['info']['email'],
                                    request.env['omniauth.auth']['uid'],
                                    current_user)
     do_sign_in
+    rescue => e
+      @error = e
+      render 'failure', status: :forbidden
+    end
   end
 
   def google_oauth2
