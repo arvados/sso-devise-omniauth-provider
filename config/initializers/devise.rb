@@ -171,7 +171,14 @@ Devise.setup do |config|
   #end
 
   require 'openid/store/filesystem'
-  config.omniauth :open_id, :store => OpenID::Store::Filesystem.new('./tmp_omniauth'), :name => 'google', :identifier => 'https://www.google.com/accounts/o8/id', :require => 'omniauth-openid'
 
-  config.omniauth :google_oauth2, CfiOauthProvider::Application.config.google_client_id, CfiOauthProvider::Application.config.google_client_secret, {}
+  # Google is phasing out OpenId 2.0, but some Arvados installations still rely on it.
+  #config.omniauth :open_id, :store => OpenID::Store::Filesystem.new('./tmp_omniauth'), :name => 'google', :identifier => 'https://www.google.com/accounts/o8/id', :require => 'omniauth-openid'
+
+  # Google OAuth2 / OpenId Connect support
+  # See config/environments.rb
+  config.omniauth :google_oauth2,
+                  CfiOauthProvider::Application.config.google_client_id,
+                  CfiOauthProvider::Application.config.google_client_secret,
+                  {:access_type => "online"}
 end
