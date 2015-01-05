@@ -45,4 +45,24 @@ CfiOauthProvider::Application.configure do
 
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
+
+  # Your secret key for verifying the integrity of signed cookies.
+  # If you change this key, all old signed cookies will become invalid!
+  # Make sure the secret is at least 30 characters and all random,
+  # no regular words or you'll be exposed to dictionary attacks.
+  #
+  config.secret_token = ''
+
+  # Google API tokens required for OAuth2 login.
+  #
+  # See https://github.com/zquestz/omniauth-google-oauth2
+  #
+  # and https://developers.google.com/accounts/docs/OAuth2
+  #
+  config.google_oauth2_client_id = ''
+  config.google_oauth2_client_secret = ''
+
+  # Enable Google OpenId 2.0 (note that this is scheduled to be shut off 20 April 2015)
+  config.google_deprecated_openid = false
+
 end
