@@ -173,6 +173,18 @@ Devise.setup do |config|
   # Google is phasing out OpenId 2.0, but some Arvados installations still rely on it.
   if CfiOauthProvider::Application.config.google_deprecated_openid
     require 'openid/store/filesystem'
+    require 'rack/openid'
+
+    # Monkey patch rack-openid gem: https://developers.google.com/accounts/docs/OpenID
+    module Rack
+      class OpenID
+        private
+        alias old_open_id_redirect_url open_id_redirect_url
+        def open_id_redirect_url(req, oidreq, trust_root, return_to, method, immediate)
+          old_open_id_redirect_url(req, oidreq, trust_root, return_to, method, immediate) + "&openid_shutdown_ack=2015-04-20"
+        end
+      end
+    end
     config.omniauth :open_id, :store => OpenID::Store::Filesystem.new('./tmp_omniauth'), :name => 'google', :identifier => 'https://www.google.com/accounts/o8/id', :require => 'omniauth-openid'
   end
 

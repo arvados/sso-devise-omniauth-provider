@@ -6,7 +6,11 @@ class User < ActiveRecord::Base
 
   devise :token_authenticatable, :database_authenticatable
 
-  devise :omniauthable, :omniauth_providers => [:google, :google_oauth2]
+  if CfiOauthProvider::Application.config.google_deprecated_openid
+    devise :omniauthable, :omniauth_providers => [:google, :google_oauth2]
+  else
+    devise :omniauthable, :omniauth_providers => [:google_oauth2]
+  end
 
   attr_accessible :email, :password, :password_confirmation, :remember_me, :first_name, :last_name
 
