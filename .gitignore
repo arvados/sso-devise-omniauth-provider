@@ -1,7 +1,8 @@
 .bundle
 log/*.log
 tmp/**/*
-config/initializers/omniauth.rb
+config/initializers/secret_token.rb
+config/environments/*.rb
 db/*.sqlite3
 *.swp
 tmp_omniauth

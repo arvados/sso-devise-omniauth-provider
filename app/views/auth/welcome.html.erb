@@ -1,12 +1,5 @@
-
-<strong>You are now signed in.</strong>
+<strong>You are now signed in as <%= current_user.email%> </strong>
 
 <p>
-Please continue to one of the applications below:
-
-<ul>
-<li><%= link_to('Arvados Workbench','https://workbench.qr1hi.arvadosapi.com') %>
-</ul>
-
+Please continue to <%= link_to 'Curoverse Public Beta', 'https://workbench.qr1hi.arvadosapi.com' %>.
 </p>
-
