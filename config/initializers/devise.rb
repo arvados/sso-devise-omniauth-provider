@@ -192,7 +192,7 @@ Devise.setup do |config|
   # See config/environments/(development, production, test).rb.example.rb
 
   opts = {:access_type => "online"}
-  if config.google_openid_realm
+  if CfiOauthProvider::Application.config.google_openid_realm
     opts[:authorize_params] = {"openid.realm" => CfiOauthProvider::Application.config.google_openid_realm }
   end
 
