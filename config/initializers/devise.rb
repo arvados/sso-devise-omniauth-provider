@@ -190,8 +190,14 @@ Devise.setup do |config|
 
   # Google OAuth2 / OpenId Connect support
   # See config/environments/(development, production, test).rb.example.rb
+
+  opts = {:access_type => "online"}
+  if config.google_openid_realm
+    opts[:authorize_params] = {"openid.realm" => CfiOauthProvider::Application.config.google_openid_realm }
+  end
+
   config.omniauth :google_oauth2,
                   CfiOauthProvider::Application.config.google_oauth2_client_id,
                   CfiOauthProvider::Application.config.google_oauth2_client_secret,
-                  {:access_type => "online"}
+                  opts
 end

@@ -1,3 +1,5 @@
+require 'jwt'
+
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
   skip_before_filter :verify_authenticity_token, :only => [:google, :google_oauth2]
@@ -15,6 +17,10 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   end
 
   def google_oauth2
+    if JWT.decode(request.env['omniauth.auth']['extra']['id_token']).payload[:openid_id]
+      # Victory!
+    end
+
     google
   end
 
