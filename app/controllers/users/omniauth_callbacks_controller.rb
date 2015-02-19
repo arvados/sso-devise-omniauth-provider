@@ -6,10 +6,10 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
   def google
     begin
-    @user = User.find_for_identity(request.env['omniauth.auth']['info']['email'],
-                                   request.env['omniauth.auth']['uid'],
-                                   current_user)
-    do_sign_in
+      @user = User.authenticate(:google, request.env['omniauth.auth']['info']['email'],
+                                request.env['omniauth.auth']['uid'],
+                                current_user)
+      do_sign_in
     rescue => e
       @error = e
       render 'failure', status: :forbidden
@@ -17,11 +17,33 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   end
 
   def google_oauth2
-    if JWT.decode(request.env['omniauth.auth']['extra']['id_token']).payload[:openid_id]
-      # Victory!
-    end
+    begin
+      begin
+        @user = User.authenticate(:google_oauth2,
+                                  request.env['omniauth.auth']['info']['email'],
+                                  request.env['omniauth.auth']['uid'],
+                                  current_user)
+      rescue User::EmailCollision => e
+        if openid_id = JWT.decode(request.env['omniauth.auth']['extra']['id_token']).payload[:openid_id]
+          # Try OpenId
+          @user = User.authenticate(:google,
+                                    request.env['omniauth.auth']['info']['email'],
+                                    openid_id,
+                                    current_user)
 
-    google
+          # Create authorization record for OAuth2
+          auth = Authentication.new(:user_id => @user.id, :provider => :google_oauth2, :uid => request.env['omniauth.auth']['uid'])
+          auth.save!
+        else
+          raise
+        end
+      end
+
+      do_sign_in
+    rescue => e
+      @error = e
+      render 'failure', status: :forbidden
+    end
   end
 
   protected

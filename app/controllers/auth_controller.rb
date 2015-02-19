@@ -36,21 +36,20 @@ class AuthController < ApplicationController
   end
 
   def user
-    hash = {
-      :provider => 'josh_id',
-      :id => current_user.id.to_s,
-      :info => {
+    info = {
          :email      => current_user.email,
          :first_name => current_user.first_name,
-         :last_name  => current_user.last_name,
-         :identity_url => current_user.identity_url
-      },
-      :extra => {
-         :first_name => current_user.first_name,
-         :last_name  => current_user.last_name,
-         :email => current_user.email,
-         :identity_url => current_user.identity_url
-      }
+         :last_name  => current_user.last_name
+    }
+
+    info[:identity_url] = (if u = Authentication.where(:provider => "google",
+                                                       :user_id => current_user.id).first
+                          then u.uid else "" end)
+
+    hash = {
+      :provider => 'josh_id',
+      :id => current_user.uuid,
+      :info => info
     }
 
     render :json => hash.to_json
