@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
     devise :omniauthable, :omniauth_providers => [:google_oauth2]
   end
 
-  attr_accessible :email, :password, :password_confirmation, :remember_me, :first_name, :last_name
+  attr_accessible :email, :remember_me, :first_name, :last_name
 
   def self.authenticate(provider, email, uid, signed_in_resource=nil)
     if auth = Authentication.where(:provider => provider.to_s, :uid => uid.to_s).first
@@ -25,10 +25,20 @@ class User < ActiveRecord::Base
       raise EmailCollision.new
     else
       # New user
-      user = User.new(:email => email, :password => Devise.friendly_token[0,20])
+      user = User.new(:email => email)
+      user.password = Devise.friendly_token[0,20]
+      user.uuid = [CfiOauthProvider::Application.config.uuid_prefix,
+                   'tpzed',
+                   rand(2**256).to_s(36)[-15..-1]].
+                  join '-'
       user.save!
-      auth = Authentication.new(:user_id => user.id, :provider => provider, :uid => uid)
+
+      auth = Authentication.new
+      auth.user_id = user.id
+      auth.provider = provider
+      auth.uid = uid
       auth.save!
+
       user
     end
   end

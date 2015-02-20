@@ -36,20 +36,25 @@ class AuthController < ApplicationController
   end
 
   def user
-    info = {
-         :email      => current_user.email,
-         :first_name => current_user.first_name,
-         :last_name  => current_user.last_name
-    }
-
-    info[:identity_url] = (if u = Authentication.where(:provider => "google",
-                                                       :user_id => current_user.id).first
-                          then u.uid else "" end)
-
     hash = {
       :provider => 'josh_id',
       :id => current_user.uuid,
-      :info => info
+      :info => {
+         :email      => current_user.email,
+         :first_name => current_user.first_name,
+         :last_name  => current_user.last_name,
+
+         # If there is a legacy OpenId 2.0 identity, provide that in identity_url.
+         # Otherwise, provide the newly allocated uuid for identity_url.
+         :identity_url => (
+           if u = Authentication.where(:provider => "google",
+                                       :user_id => current_user.id).first
+           then
+             u.uid
+           else
+             current_user.uuid
+           end)
+      }
     }
 
     render :json => hash.to_json
