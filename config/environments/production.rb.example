@@ -46,6 +46,10 @@ CfiOauthProvider::Application.configure do
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
 
+  # The hostname to use for the confirmation link in the ActionMailer
+  # confirmation email.
+  Rails.application.routes.default_url_options[:host] = 'localhost:3002'
+
   # Your secret key for verifying the integrity of signed cookies.
   # If you change this key, all old signed cookies will become invalid!
   # Make sure the secret is at least 30 characters and all random,
