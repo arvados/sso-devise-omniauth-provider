@@ -27,10 +27,6 @@ class User < ActiveRecord::Base
       # New user
       user = User.new(:email => email)
       user.password = Devise.friendly_token[0,20]
-      user.uuid = [CfiOauthProvider::Application.config.uuid_prefix,
-                   'tpzed',
-                   rand(2**256).to_s(36)[-15..-1]].
-                  join '-'
       user.save!
 
       auth = Authentication.new
@@ -56,5 +52,9 @@ class User < ActiveRecord::Base
   def initialize_fields
     self.status = "Active"
     self.expiration_date = 1.year.from_now
+    self.uuid = [CfiOauthProvider::Application.config.uuid_prefix,
+                 'tpzed',
+                 rand(2**256).to_s(36)[-15..-1]].
+                join '-'
   end
 end
