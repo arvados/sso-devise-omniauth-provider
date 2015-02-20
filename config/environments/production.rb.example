@@ -53,6 +53,10 @@ CfiOauthProvider::Application.configure do
   #
   config.secret_token = ''
 
+  # The uuid prefix for generating new Arvados user uuids.  Must be exactly
+  # five characters long in the range [a-z0-9].
+  config.uuid_prefix = 'zzzzz'
+
   # Google API tokens required for OAuth2 login.
   #
   # See https://github.com/zquestz/omniauth-google-oauth2
