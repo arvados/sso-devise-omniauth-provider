@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
 
   before_validation :initialize_fields, :on => :create
 
-  devise :token_authenticatable, :database_authenticatable
+  devise :token_authenticatable, :database_authenticatable, :registerable, :confirmable
 
   if CfiOauthProvider::Application.config.google_deprecated_openid
     devise :omniauthable, :omniauth_providers => [:google, :google_oauth2]
@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
     devise :omniauthable, :omniauth_providers => [:google_oauth2]
   end
 
-  attr_accessible :email, :remember_me, :first_name, :last_name
+  attr_accessible :email, :password, :password_confirmation, :remember_me, :first_name, :last_name
 
   def self.authenticate(provider, email, uid, signed_in_resource=nil)
     if auth = Authentication.where(:provider => provider.to_s, :uid => uid.to_s).first
