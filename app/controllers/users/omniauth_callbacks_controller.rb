@@ -30,9 +30,11 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
                                     request.env['omniauth.auth']['info']['email'],
                                     openid_id,
                                     current_user)
-
-          # Create authorization record for OAuth2
-          auth = Authentication.new(:user_id => @user.id, :provider => :google_oauth2, :uid => request.env['omniauth.auth']['uid'])
+          # Create authentication record for OAuth2
+          auth = Authentication.new
+          auth.user_id = @user.id
+          auth.provider = :google_oauth2
+          auth.uid = request.env['omniauth.auth']['uid']
           auth.save!
         else
           raise
