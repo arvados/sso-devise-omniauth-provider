@@ -21,4 +21,5 @@ gem 'jquery-rails'
 gem 'devise', '2.2.8'
 gem 'omniauth'
 gem 'omniauth-openid'
-gem "omniauth-google-oauth2"
+gem 'omniauth-google-oauth2'
+gem 'ruby_jwt'

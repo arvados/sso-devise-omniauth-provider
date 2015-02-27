@@ -2,6 +2,9 @@ class User < ActiveRecord::Base
   has_many :authentications, :dependent => :delete_all
   has_many :access_grants, :dependent => :delete_all
 
+  class EmailCollision < StandardError
+  end
+
   before_validation :initialize_fields, :on => :create
 
   devise :token_authenticatable, :database_authenticatable
@@ -12,23 +15,26 @@ class User < ActiveRecord::Base
     devise :omniauthable, :omniauth_providers => [:google_oauth2]
   end
 
-  attr_accessible :email, :password, :password_confirmation, :remember_me, :first_name, :last_name
+  attr_accessible :email, :remember_me, :first_name, :last_name
 
-  def self.find_for_identity(email, identity_url, signed_in_resource=nil)
-    if user = User.where(:identity_url => identity_url).first
-      # We found the user record by means of the identity_url, all is good
-      user
+  def self.authenticate(provider, email, uid, signed_in_resource=nil)
+    if auth = Authentication.where(:provider => provider.to_s, :uid => uid.to_s).first
+      User.find(auth.user_id)
     elsif user = User.where(:email => email).first
-      # User record exists, but the identity_url does not match
-      # This is fishy. Politely decline access.
-      raise "Identity_url mismatch"
+      # User record exists, but don't have any information for this provider
+      raise EmailCollision.new
     else
       # New user
-      # identity_url is deliberately not in attr_accessible to avoid shenanigans, so assign
-      # it explicitly. Ward, 2012-08-29
-      user = User.new(:email => email, :password => Devise.friendly_token[0,20])
-      user.identity_url = identity_url
+      user = User.new(:email => email)
+      user.password = Devise.friendly_token[0,20]
       user.save!
+
+      auth = Authentication.new
+      auth.user_id = user.id
+      auth.provider = provider
+      auth.uid = uid
+      auth.save!
+
       user
     end
   end
@@ -46,5 +52,9 @@ class User < ActiveRecord::Base
   def initialize_fields
     self.status = "Active"
     self.expiration_date = 1.year.from_now
+    self.uuid = [CfiOauthProvider::Application.config.uuid_prefix,
+                 'tpzed',
+                 rand(2**256).to_s(36)[-15..-1]].
+                join '-'
   end
 end
