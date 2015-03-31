@@ -196,8 +196,15 @@ Devise.setup do |config|
     opts[:authorize_params] = {"openid.realm" => CfiOauthProvider::Application.config.google_openid_realm }
   end
 
-  config.omniauth :google_oauth2,
-                  CfiOauthProvider::Application.config.google_oauth2_client_id,
-                  CfiOauthProvider::Application.config.google_oauth2_client_secret,
-                  opts
+  if CfiOauthProvider::Application.config.google_oauth2_client_id
+    config.omniauth :google_oauth2,
+                    CfiOauthProvider::Application.config.google_oauth2_client_id,
+                    CfiOauthProvider::Application.config.google_oauth2_client_secret,
+                    opts
+  end
+
+  if CfiOauthProvider::Application.config.use_ldap
+    config.omniauth :ldap, CfiOauthProvider::Application.config.use_ldap
+  end
+
 end
