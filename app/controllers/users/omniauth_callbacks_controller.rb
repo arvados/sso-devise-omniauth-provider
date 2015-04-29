@@ -48,10 +48,23 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     end
   end
 
+  def ldap
+    begin
+      @user = User.authenticate(:ldap,
+                                request.env['omniauth.auth']['info']['nickname'] + "@" + CfiOauthProvider::Application.config.use_ldap[:email_domain],
+                                request.env['omniauth.auth']['uid'],
+                                current_user)
+      do_sign_in
+    rescue => e
+      @error = e
+      render 'failure', status: :forbidden
+    end
+  end
+
   protected
 
   def do_sign_in
-    @user.first_name = request.env['omniauth.auth']['info']['first_name']
+    @user.first_name = request.env['omniauth.auth']['info']['first_name'] || request.env['omniauth.auth']['info']['name']
     @user.last_name = request.env['omniauth.auth']['info']['last_name']
     @user.save
 
