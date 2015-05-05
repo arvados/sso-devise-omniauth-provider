@@ -16,7 +16,7 @@ class SessionsController < Devise::SessionsController
   def create
     begin
       self.resource = warden.authenticate!(auth_options)
-      redirect_to :root
+      redirect_to session[:user_return_to]
     rescue => e
       puts "#{e}"
       redirect_to :root
