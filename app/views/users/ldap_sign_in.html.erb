@@ -1,4 +1,6 @@
-<h2>Please sign in to Arvados</h2>
+<% content_for :page_title do %>
+  Please sign in to <%= Rails.application.config.site_title %>
+<% end %>
 
 <% if params[:alert] %>
   <div class="alert alert-danger">

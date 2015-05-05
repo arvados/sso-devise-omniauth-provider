@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Arvados login</title>
+  <title><%= Rails.application.config.site_title %> sign on</title>
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
@@ -13,6 +13,21 @@
     <div class="row">
       <div class="col-md-offset-3 col-md-6 sign-in-box">
         <div>
+
+          <h2><%= yield :page_title %></h2>
+
+          <% if flash[:alert] %>
+            <div class="alert alert-danger">
+              <%= flash[:alert] %>
+            </div>
+          <% end %>
+
+          <% if flash[:notice] %>
+            <div class="alert alert-info">
+              <%= flash[:notice] %>
+            </div>
+          <% end %>
+
           <%= yield %>
 
           <p>

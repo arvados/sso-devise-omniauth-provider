@@ -1,3 +1,5 @@
+require_relative 'load_config.rb'
+
 # Use this hook to configure devise mailer, warden hooks and so forth. The first
 # four configuration values can also be set straight in your models.
 Devise.setup do |config|
@@ -204,7 +206,19 @@ Devise.setup do |config|
   end
 
   if CfiOauthProvider::Application.config.use_ldap
-    config.omniauth :ldap, CfiOauthProvider::Application.config.use_ldap
+    config.omniauth :ldap, {
+                      :title => CfiOauthProvider::Application.config.use_ldap["title"],
+                      :host => CfiOauthProvider::Application.config.use_ldap["host"],
+                      :port => CfiOauthProvider::Application.config.use_ldap["port"],
+                      :method => CfiOauthProvider::Application.config.use_ldap["method"].to_sym,
+                      :base => CfiOauthProvider::Application.config.use_ldap["base"],
+                      :uid => CfiOauthProvider::Application.config.use_ldap["uid"],
+                      :email_domain => CfiOauthProvider::Application.config.use_ldap["email_domain"],
+                      :name_proc => Proc.new {|name| name.gsub(/@#{CfiOauthProvider::Application.config.use_ldap["email_domain"]}$/,'')},
+                      :bind_dn => CfiOauthProvider::Application.config.use_ldap["bind_dn"],
+                      :password => CfiOauthProvider::Application.config.use_ldap["password"]
+                    }
+
   end
 
 end

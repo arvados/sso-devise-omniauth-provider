@@ -1,15 +1,5 @@
-<h2>Please sign in to Arvados</h2>
-
-<% if flash[:alert] %>
-  <div class="alert alert-danger">
-    <%= flash[:alert] %>
-  </div>
-<% end %>
-
-<% if flash[:notice] %>
-  <div class="alert alert-info">
-    <%= flash[:notice] %>
-  </div>
+<% content_for :page_title do %>
+  Please sign in to <%= Rails.application.config.site_title %>
 <% end %>
 
 <%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>

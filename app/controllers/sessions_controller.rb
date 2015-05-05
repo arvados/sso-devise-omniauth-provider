@@ -15,12 +15,11 @@ class SessionsController < Devise::SessionsController
 
   def create
     begin
-      puts "starting #{auth_options}"
       self.resource = warden.authenticate!(auth_options)
-      set_flash_message(:notice, :signed_in) if is_flashing_format?
-      yield resource if block_given?
-      respond_with resource, location: after_sign_in_path_for(resource)
+      redirect_to :root
     rescue => e
+      puts "#{e}"
+      redirect_to :root
     end
   end
 end

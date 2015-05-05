@@ -9,7 +9,13 @@ class User < ActiveRecord::Base
 
   before_validation :initialize_fields, :on => :create
 
-  devise :token_authenticatable, :database_authenticatable, :registerable, :confirmable
+  devise :token_authenticatable, :database_authenticatable
+  if CfiOauthProvider::Application.config.allow_account_registration
+    devise :registerable
+    if CfiOauthProvider::Application.config.require_email_confirmation
+      devise :confirmable
+    end
+  end
 
   providers = []
   providers << :ldap if CfiOauthProvider::Application.config.use_ldap

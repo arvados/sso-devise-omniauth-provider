@@ -1,4 +1,6 @@
-<h2>Please sign up for an Arvados account</h2>
+<% content_for :page_title do %>
+  Please sign up for <%= Rails.application.config.site_title %> account
+<% end %>
 
 <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f| %>
   <%= devise_error_messages! %>
