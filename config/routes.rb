@@ -15,6 +15,8 @@ CfiOauthProvider::Application.routes.draw do
   match '/auth/josh_id/user' => 'auth#user'
   match '/oauth/token' => 'auth#access_token'
 
+  match '/users/ldap_sign_in'
+
   # Account linking
   #match 'authentications/:user_id/link' => 'authentications#link', :as => :link_accounts
   #match 'authentications/:user_id/add' => 'authentications#add', :as => :add_account
