@@ -3,6 +3,7 @@ log/*.log
 tmp/**/*
 config/initializers/secret_token.rb
 config/environments/*.rb
+config/application.yml
 db/*.sqlite3
 *.swp
 tmp_omniauth
