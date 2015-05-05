@@ -1,0 +1,23 @@
+
+<%- if current_user %>
+  <%= link_to "Sign out", :destroy_user_session, class: "btn btn-default btn-links", role: "button" %>
+  <%- if controller_name != 'registrations' %>
+    <%= link_to "Update account", :edit_user_registration, class: "btn btn-default btn-links", role: "button" %>
+  <% end %>
+<% end -%>
+
+<% if defined? resource_name %>
+
+  <%- if controller_name != 'sessions' and not current_user %>
+    <%= link_to "Sign in to an existing account", new_session_path(resource_name), class: "btn btn-default btn-links", role: "button" %>
+  <% end -%>
+
+  <%- if devise_mapping.registerable? && controller_name != 'registrations' %>
+    <%= link_to "Sign up for a new account", new_registration_path(resource_name), class: "btn btn-default btn-links", role: "button" %>
+  <% end -%>
+
+  <%- if devise_mapping.confirmable? && controller_name != 'confirmations' %>
+    <%= link_to "Didn't receive confirmation instructions?", new_confirmation_path(resource_name), class: "btn btn-default btn-links", role: "button" %>
+  <% end -%>
+
+<% end %>
