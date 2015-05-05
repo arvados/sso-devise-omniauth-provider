@@ -9,7 +9,20 @@
 </head>
 <body>
 
-<%= yield %>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-offset-3 col-md-6 sign-in-box">
+        <div>
+          <%= yield %>
+
+          <p>
+            <%= render :partial => "application/links" %>
+          </p>
+
+        </div>
+      </div>
+    </div>
+  </div>
 
 </body>
 </html>

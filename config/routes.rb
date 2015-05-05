@@ -2,7 +2,8 @@ CfiOauthProvider::Application.routes.draw do
 
   devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks",
                                        :registrations => 'registrations',
-                                       :sessions => 'sessions' }
+                                       :sessions => 'sessions',
+                                       :confirmations => 'confirmations' }
 
   # "authentications" controller is not presently being used.
   # omniauth client stuff
