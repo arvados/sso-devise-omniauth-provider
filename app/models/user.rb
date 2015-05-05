@@ -9,7 +9,7 @@ class User < ActiveRecord::Base
 
   before_validation :initialize_fields, :on => :create
 
-  devise :token_authenticatable, :database_authenticatable
+  devise :token_authenticatable, :database_authenticatable, :registerable, :confirmable
 
   providers = []
   providers << :ldap if CfiOauthProvider::Application.config.use_ldap
@@ -18,7 +18,7 @@ class User < ActiveRecord::Base
 
   devise :omniauthable, :omniauth_providers => providers
 
-  attr_accessible :email, :remember_me, :first_name, :last_name
+  attr_accessible :email, :password, :password_confirmation, :remember_me, :first_name, :last_name
 
   def self.authenticate(provider, email, uid, signed_in_resource=nil)
     if auth = Authentication.where(:provider => provider.to_s, :uid => uid.to_s).first
