@@ -1,3 +1,8 @@
+
+test:
+  uuid_prefix: zzzzz
+  secret_token: <%= rand(2**512).to_s(36) %>
+
 common:
   # The site name that will be used in text such as "Sign in to site_title"
   site_title: Arvados
@@ -6,6 +11,15 @@ common:
   # the user as the default destination on the welcome page.
   default_link_title: Arvados
   default_link_url: "http://localhost:3000"
+
+  # secret_token is a string of alphanumeric characters used by Rails
+  # to sign session tokens. IMPORTANT: This is a site secret. It
+  # should be at least 50 characters.
+  secret_token: ~
+
+  # The uuid prefix for generating new Arvados user uuids.  Must be exactly
+  # five characters long in the range [a-z0-9].
+  uuid_prefix: ~
 
   # Google API tokens required for OAuth2 login.
   #
@@ -19,6 +33,9 @@ common:
   # 2.0 to Google OAuth2 OpenId Connect (Google will provide OpenId 2.0 user
   # identifiers via the openid.realm parameter in the OAuth2 flow until 2017).
   google_openid_realm: false
+
+  # Enable login via Google OpenId 2.0 (note this is scheduled to be shut off 20 April 2015!)
+  google_deprecated_openid: false
 
   # Enable LDAP support.
   #

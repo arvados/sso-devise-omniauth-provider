@@ -30,32 +30,4 @@ CfiOauthProvider::Application.configure do
   # confirmation email.
   Rails.application.routes.default_url_options[:host] = 'localhost:3002'
 
-  # Your secret key for verifying the integrity of signed cookies.
-  # If you change this key, all old signed cookies will become invalid!
-  # Make sure the secret is at least 30 characters and all random,
-  # no regular words or you'll be exposed to dictionary attacks.
-  #
-  config.secret_token = ''
-
-  # The uuid prefix for generating new Arvados user uuids.  Must be exactly
-  # five characters long in the range [a-z0-9].
-  config.uuid_prefix = 'zzzzz'
-
-  # Google API tokens required for OAuth2 login.
-  #
-  # See https://github.com/zquestz/omniauth-google-oauth2
-  #
-  # and https://developers.google.com/accounts/docs/OAuth2
-  #
-  config.google_oauth2_client_id = ''
-  config.google_oauth2_client_secret = ''
-
-  # Set this to your OpenId 2.0 realm to enable migration from Google OpenId
-  # 2.0 to Google OAuth2 OpenId Connect (Google will provide OpenId 2.0 user
-  # identifiers via the openid.realm parameter in the OAuth2 flow until 2017).
-  config.google_openid_realm = nil
-
-  # Enable login via Google OpenId 2.0 (note this is scheduled to be shut off 20 April 2015!)
-  config.google_deprecated_openid = false
-
 end
