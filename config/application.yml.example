@@ -12,6 +12,7 @@
 
 common:
   secret_token: ~
+  uuid_prefix: ~
 
   # The site name that will be used in text such as "Sign in to site_title"
   site_title: Arvados
