@@ -18,7 +18,7 @@ class SessionsController < Devise::SessionsController
       self.resource = warden.authenticate!(auth_options)
       redirect_to session[:user_return_to]
     rescue => e
-      puts "#{e}"
+      logger.warn e.backtrace
       redirect_to :root
     end
   end

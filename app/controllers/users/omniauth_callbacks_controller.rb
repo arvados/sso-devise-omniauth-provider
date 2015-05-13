@@ -11,6 +11,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
                                 current_user)
       do_sign_in
     rescue => e
+      logger.warn e.backtrace
       @error = e
       render 'failure', status: :forbidden
     end
@@ -43,6 +44,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
       do_sign_in
     rescue => e
+      logger.warn e.backtrace
       @error = e
       render 'failure', status: :forbidden
     end
@@ -56,6 +58,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
                                 current_user)
       do_sign_in
     rescue => e
+      logger.warn e.backtrace
       @error = e
       render 'failure', status: :forbidden
     end
