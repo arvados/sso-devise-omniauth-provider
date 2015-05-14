@@ -53,7 +53,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   def ldap
     begin
       @user = User.authenticate(:ldap,
-                                request.env['omniauth.auth']['info']['nickname'] + "@" + CfiOauthProvider::Application.config.use_ldap[:email_domain],
+                                request.env['omniauth.auth']['info']['nickname'] + "@" + CfiOauthProvider::Application.config.use_ldap["email_domain"],
                                 request.env['omniauth.auth']['uid'],
                                 current_user)
       do_sign_in
