@@ -5,6 +5,7 @@ gem 'therubyracer'
 
 group :production do
   gem 'pg'
+  gem 'passenger'
 end
 
 # asset pipeline
