@@ -11,8 +11,8 @@
 # 5. Section in application.default.yml called "common"
 
 common:
-  secret_token: ~
   uuid_prefix: ~
+  secret_token: ~
 
   # The site name that will be used in text such as "Sign in to site_title"
   site_title: Arvados
@@ -22,6 +22,22 @@ common:
   default_link_title: Arvados
   default_link_url: "http://localhost:3000"
 
+  ###
+  ### Local account configuration.  This is enabled if neither
+  ### google_oauth2 or LDAP are enabled below.
+  ###
+  # If true, allow new creation of new accounts in the SSO server's internal
+  # user database.
+  allow_account_registration: false
+
+  # If true, send an email confirmation before activating new accounts in the
+  # SSO server's internal user database.
+  require_email_confirmation: false
+
+
+  ###
+  ### Google+ OAuth2 authentication.
+  ###
   # Google API tokens required for OAuth2 login.
   #
   # See https://github.com/zquestz/omniauth-google-oauth2
@@ -35,7 +51,10 @@ common:
   # identifiers via the openid.realm parameter in the OAuth2 flow until 2017).
   google_openid_realm: false
 
-  # Enable LDAP support.
+
+  ###
+  ### LDAP authentication.
+  ###
   #
   # If you want to use LDAP, you need to provide
   # the following set of fields under the use_ldap key.
@@ -51,11 +70,3 @@ common:
   #   #bind_dn: "some_user"
   #   #password: "some_password"
   use_ldap: false
-
-  # If true, allow new creation of new accounts in the SSO server's internal
-  # user database.
-  allow_account_registration: false
-
-  # If true, send an email confirmation before activating new accounts in the
-  # SSO server's internal user database.
-  require_email_confirmation: false

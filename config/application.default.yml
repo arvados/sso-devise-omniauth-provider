@@ -21,6 +21,25 @@ common:
   # five characters long in the range [a-z0-9].
   uuid_prefix: ~
 
+  # You really want to run everything over SSL.
+  force_ssl: true
+
+  ###
+  ### Local account configuration.  This is enabled if neither
+  ### google_oauth2 or LDAP are enabled below.
+  ###
+  # If true, allow new creation of new accounts in the SSO server's internal
+  # user database.
+  allow_account_registration: false
+
+  # If true, send an email confirmation before activating new accounts in the
+  # SSO server's internal user database.
+  require_email_confirmation: false
+
+
+  ###
+  ### Google+ OAuth2 authentication.
+  ###
   # Google API tokens required for OAuth2 login.
   #
   # See https://github.com/zquestz/omniauth-google-oauth2
@@ -37,7 +56,10 @@ common:
   # Enable login via Google OpenId 2.0 (note this is scheduled to be shut off 20 April 2015!)
   google_deprecated_openid: false
 
-  # Enable LDAP support.
+
+  ###
+  ### LDAP authentication.
+  ###
   #
   # If you want to use LDAP, you need to provide
   # the following set of fields under the use_ldap key.
@@ -53,11 +75,3 @@ common:
   #   #bind_dn: "some_user"
   #   #password: "some_password"
   use_ldap: false
-
-  # If true, allow new creation of new accounts in the SSO server's internal
-  # user database.
-  allow_account_registration: false
-
-  # If true, send an email confirmation before activating new accounts in the
-  # SSO server's internal user database.
-  require_email_confirmation: false

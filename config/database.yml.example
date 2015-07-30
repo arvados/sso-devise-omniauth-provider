@@ -1,3 +1,12 @@
+production:
+  adapter: postgresql
+  encoding: utf8
+  database: arvados_sso_production
+  username: arvados_sso
+  password: xxxxxxxx
+  host: localhost
+  template: template0
+
 development:
   adapter: postgresql
   encoding: utf8
@@ -14,15 +23,6 @@ test:
   adapter: postgresql
   encoding: utf8
   database: arvados_sso_test
-  username: arvados_sso
-  password: xxxxxxxx
-  host: localhost
-  template: template0
-
-production:
-  adapter: postgresql
-  encoding: utf8
-  database: arvados_sso_production
   username: arvados_sso
   password: xxxxxxxx
   host: localhost
