@@ -7,3 +7,6 @@ config/application.yml
 db/*.sqlite3
 *.swp
 tmp_omniauth
+packages
+git-commit.version
+vendor/bundle
