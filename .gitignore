@@ -4,9 +4,13 @@ tmp/**/*
 config/initializers/secret_token.rb
 config/environments/*.rb
 config/application.yml
+config/database.yml
 db/*.sqlite3
 *.swp
 tmp_omniauth
 packages
 git-commit.version
 vendor/bundle
+vendor/cache
+log
+tmp
