@@ -29,6 +29,10 @@ Create your Twitter App and Facebook App. Create the initializer file with the f
       provider :facebook, 'facebook-appid', 'facebook-app-secret'
     end
 
+Curoverse modifications
+
+* we use config/application.yml for configuration
+
 That's it! Your on your way:
 
     rails server
