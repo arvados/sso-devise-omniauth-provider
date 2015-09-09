@@ -31,7 +31,7 @@ Create your Twitter App and Facebook App. Create the initializer file with the f
 
 Curoverse modifications.
 
-* We use config/application.yml for configuration.
+*  We use config/application.yml for configuration.
 
 That's it! Your on your way:
 
