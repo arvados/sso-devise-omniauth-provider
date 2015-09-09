@@ -29,7 +29,7 @@ Create your Twitter App and Facebook App. Create the initializer file with the f
       provider :facebook, 'facebook-appid', 'facebook-app-secret'
     end
 
-Curoverse modifications
+Curoverse modifications.
 
 * We use config/application.yml for configuration.
 
