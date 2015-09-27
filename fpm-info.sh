@@ -1,6 +1,6 @@
 case "$TARGET" in
     debian* | ubuntu*)
-        fpm_depends+=('postgresql' 'libpq-dev')
+        fpm_depends+=('postgresql' 'libpq-dev' 'nginx | apache2')
         ;;
 esac
 
