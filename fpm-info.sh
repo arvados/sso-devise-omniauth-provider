@@ -2,6 +2,9 @@ case "$TARGET" in
     debian* | ubuntu*)
         fpm_depends+=('postgresql' 'libpq-dev' 'nginx | apache2')
         ;;
+    centos*)
+        fpm_depends+=('postgresql-server' 'postgresql-devel' 'httpd')
+        ;;
 esac
 
 # Exclude all files and directories matched by .gitignore
