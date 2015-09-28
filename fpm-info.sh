@@ -3,7 +3,7 @@ case "$TARGET" in
         fpm_depends+=('postgresql' 'libpq-dev' 'nginx | apache2')
         ;;
     centos*)
-        fpm_depends+=('postgresql-server' 'postgresql-devel' 'httpd')
+        fpm_depends+=('postgresql-server' 'postgresql-devel')
         ;;
 esac
 
