@@ -1,9 +1,11 @@
+fpm_args+=(--iteration 5)
+
 case "$TARGET" in
     debian* | ubuntu*)
-        fpm_depends+=('postgresql' 'libpq-dev' 'nginx | apache2')
+        fpm_depends+=('libpq-dev' 'nginx | apache2')
         ;;
     centos*)
-        fpm_depends+=('postgresql-server' 'postgresql-devel')
+        fpm_depends+=('postgresql-devel')
         ;;
 esac
 
