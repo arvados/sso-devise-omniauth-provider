@@ -1,5 +1,3 @@
-fpm_args+=(--iteration 5)
-
 case "$TARGET" in
     debian* | ubuntu*)
         fpm_depends+=('libpq-dev' 'nginx | apache2')
