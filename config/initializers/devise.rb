@@ -207,6 +207,12 @@ Devise.setup do |config|
   end
 
   if CfiOauthProvider::Application.config.use_ldap
+    # Don't strip the domain part if we're using the email as auth credential
+    if CfiOauthProvider::Application.config.use_ldap["uid"] == "mail"
+      name_proc = Proc.new {|name| name}
+    else
+      name_proc = Proc.new {|name| name.gsub(/@#{CfiOauthProvider::Application.config.use_ldap["email_domain"]}$/,'')}
+    end
     config.omniauth :ldap, {
                       :title => CfiOauthProvider::Application.config.use_ldap["title"],
                       :host => CfiOauthProvider::Application.config.use_ldap["host"],
@@ -215,7 +221,7 @@ Devise.setup do |config|
                       :base => CfiOauthProvider::Application.config.use_ldap["base"],
                       :uid => CfiOauthProvider::Application.config.use_ldap["uid"],
                       :email_domain => CfiOauthProvider::Application.config.use_ldap["email_domain"],
-                      :name_proc => Proc.new {|name| name.gsub(/@#{CfiOauthProvider::Application.config.use_ldap["email_domain"]}$/,'')},
+                      :name_proc => name_proc,
                       :bind_dn => CfiOauthProvider::Application.config.use_ldap["bind_dn"],
                       :password => CfiOauthProvider::Application.config.use_ldap["password"]
                     }
