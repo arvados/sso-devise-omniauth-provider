@@ -209,10 +209,10 @@ Devise.setup do |config|
   if CfiOauthProvider::Application.config.use_ldap
     # Don't strip the domain part if we're using the email as auth credential
     if CfiOauthProvider::Application.config.use_ldap["uid"] == "mail"
-      logger.info "[Devise LDAP] 'uid: mail' configured, so do not strip domain part"
+      Rails.logger.info "[Devise LDAP] 'uid: mail' configured, so do not strip domain part"
       name_proc = Proc.new {|name| name}
     else
-      logger.info "[Devise LDAP] Will be stripping the domain part on authentication"
+      Rails.logger.info "[Devise LDAP] Will be stripping the domain part on authentication"
       name_proc = Proc.new {|name| name.gsub(/@#{CfiOauthProvider::Application.config.use_ldap["email_domain"]}$/,'')}
     end
     config.omniauth :ldap, {
