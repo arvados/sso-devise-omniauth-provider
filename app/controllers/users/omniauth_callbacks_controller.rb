@@ -51,12 +51,18 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   end
 
   def ldap
+    if CfiOauthProvider::Application.config.use_ldap["uid"] == "mail"
+      email = request.env['omniauth.auth']['info']['email']
+    else
+      email = request.env['omniauth.auth']['info']['nickname'] + "@" + CfiOauthProvider::Application.config.use_ldap["email_domain"]
+    end
+
     begin
       @user = User.authenticate(:ldap,
-                                request.env['omniauth.auth']['info']['nickname'] + "@" + CfiOauthProvider::Application.config.use_ldap["email_domain"],
+                                email,
                                 request.env['omniauth.auth']['uid'],
                                 current_user)
-      do_sign_in
+      do_sign_in "LDAP"
     rescue => e
       logger.warn e.backtrace
       @error = e
@@ -66,7 +72,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
   protected
 
-  def do_sign_in
+  def do_sign_in(kind="Google")
     @user.first_name = request.env['omniauth.auth']['info']['first_name'] || request.env['omniauth.auth']['info']['name']
     @user.last_name = request.env['omniauth.auth']['info']['last_name']
     @user.save
@@ -74,7 +80,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     current_user = @user
 
     if @user.persisted?
-      flash[:notice] = I18n.t "devise.omniauth_callbacks.success", :kind => "Google"
+      flash[:notice] = I18n.t "devise.omniauth_callbacks.success", :kind => kind
       sign_in_and_redirect @user, :event => :authentication
     else
       session["devise.google_data"] = request.env["omniauth.auth"]
