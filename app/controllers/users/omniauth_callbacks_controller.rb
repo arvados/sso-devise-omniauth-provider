@@ -51,10 +51,15 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   end
 
   def ldap
-    if CfiOauthProvider::Application.config.use_ldap["uid"] == "mail"
+    ldap_conf = CfiOauthProvider::Application.config.use_ldap
+
+    if ldap_conf["uid"] == "mail"
       email = request.env['omniauth.auth']['info']['email']
+    elsif ldap_conf["email_domain"].nil? or ldap_conf["email_domain"].empty?
+      # May not be an email
+      email = request.env['omniauth.auth']['info']['nickname']
     else
-      email = request.env['omniauth.auth']['info']['nickname'] + "@" + CfiOauthProvider::Application.config.use_ldap["email_domain"]
+      email = request.env['omniauth.auth']['info']['nickname'] + "@" + ldap_conf["email_domain"]
     end
 
     begin
