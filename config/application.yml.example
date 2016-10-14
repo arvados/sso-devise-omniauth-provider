@@ -69,4 +69,7 @@ common:
   #   email_domain: example.com
   #   #bind_dn: "some_user"
   #   #password: "some_password"
+  #
+  # If 'email_domain' field is set, it will be stripped from what
+  # the user enters as a login name.
   use_ldap: false

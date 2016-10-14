@@ -207,17 +207,27 @@ Devise.setup do |config|
   end
 
   if CfiOauthProvider::Application.config.use_ldap
+    ldap_conf = CfiOauthProvider::Application.config.use_ldap
+
+    if ldap_conf["email_domain"].nil? or ldap_conf["email_domain"].empty?
+      # No email_domain defined, so do not strip anything from provided login
+      name_proc = Proc.new {|name| name}
+    else
+      # Strip email_domain from user provided login
+      name_proc = Proc.new {|name| name.gsub(/@#{ldap_conf["email_domain"]}$/,'')}
+    end
+
     config.omniauth :ldap, {
-                      :title => CfiOauthProvider::Application.config.use_ldap["title"],
-                      :host => CfiOauthProvider::Application.config.use_ldap["host"],
-                      :port => CfiOauthProvider::Application.config.use_ldap["port"],
-                      :method => CfiOauthProvider::Application.config.use_ldap["method"].to_sym,
-                      :base => CfiOauthProvider::Application.config.use_ldap["base"],
-                      :uid => CfiOauthProvider::Application.config.use_ldap["uid"],
-                      :email_domain => CfiOauthProvider::Application.config.use_ldap["email_domain"],
-                      :name_proc => Proc.new {|name| name.gsub(/@#{CfiOauthProvider::Application.config.use_ldap["email_domain"]}$/,'')},
-                      :bind_dn => CfiOauthProvider::Application.config.use_ldap["bind_dn"],
-                      :password => CfiOauthProvider::Application.config.use_ldap["password"]
+                      :title        => ldap_conf["title"],
+                      :host         => ldap_conf["host"],
+                      :port         => ldap_conf["port"],
+                      :method       => ldap_conf["method"].to_sym,
+                      :base         => ldap_conf["base"],
+                      :uid          => ldap_conf["uid"],
+                      :email_domain => ldap_conf["email_domain"],
+                      :name_proc    => name_proc,
+                      :bind_dn      => ldap_conf["bind_dn"],
+                      :password     => ldap_conf["password"]
                     }
 
   end
