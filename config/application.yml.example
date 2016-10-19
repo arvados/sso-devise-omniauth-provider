@@ -59,17 +59,32 @@ common:
   # If you want to use LDAP, you need to provide
   # the following set of fields under the use_ldap key.
   #
-  # use_ldap: false
+  # If 'email_domain' field is set, it will be stripped from the email address
+  # entered by the user prior attempting LDAP binding on 'uid'.  This supports
+  # the case where it is not possible to look up 'bob@example.com' but instead
+  # must be looked up as 'uid=bob'.
+  #
+  # If it is possible to look up the email address directly (for example
+  # setting "uid: mail") you should prefer that and leave 'email_domain' unset.
+  #
+  # If 'username' is set, this specifies the LDAP field that will be propagated
+  # to the "username" field in the users table.  This should be a
+  # posix-compatible username (which may be different from the username part of
+  # the email address.)
+  #
+  # Provide 'bind_dn' and 'password' if your LDAP server requires
+  # a login before authenticating a user.
+  #
+  # use_ldap:
   #   title: Example LDAP
   #   host: ldap.example.com
   #   port: 636
   #   method: ssl
   #   base: "ou=Users, dc=example, dc=com"
   #   uid: uid
-  #   email_domain: example.com
+  #   username: uid
+  #   #email_domain: example.com
   #   #bind_dn: "some_user"
   #   #password: "some_password"
   #
-  # If 'email_domain' field is set, it will be stripped from what
-  # the user enters as a login name.
   use_ldap: false

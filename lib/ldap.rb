@@ -9,6 +9,11 @@ module OmniAuth
       end
 
       def fail!(message_key, exception = nil)
+        if exception
+          log :error, "Authentication failure! #{message_key}: #{exception.class}, #{exception.message}"
+        else
+          log :error, "Authentication failure! #{message_key} encountered."
+        end
         redirect "/users/ldap_sign_in?alert=1"
       end
 
