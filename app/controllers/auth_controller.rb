@@ -43,6 +43,7 @@ class AuthController < ApplicationController
          :email      => current_user.email,
          :first_name => current_user.first_name,
          :last_name  => current_user.last_name,
+         :username => current_user.username,
 
          # If there is a legacy OpenId 2.0 identity, provide that in identity_url.
          # Otherwise, provide the newly allocated uuid for identity_url.

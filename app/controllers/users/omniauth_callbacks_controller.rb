@@ -62,12 +62,17 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
       render 'failure', status: :forbidden
       return
     end
-    
+
+    username = if ldap_conf['username']
+                 request.env['omniauth.auth']['extra']['raw_info'][ldap_conf['username'].to_sym][0]
+               end
+
     begin
       @user = User.authenticate(:ldap,
                                 email,
                                 request.env['omniauth.auth']['uid'],
-                                current_user)
+                                current_user,
+                                username: username)
       do_sign_in "LDAP"
     rescue => e
       logger.warn e.backtrace

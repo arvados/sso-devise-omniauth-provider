@@ -26,7 +26,7 @@ class User < ActiveRecord::Base
 
   attr_accessible :email, :password, :password_confirmation, :remember_me, :first_name, :last_name
 
-  def self.authenticate(provider, email, uid, signed_in_resource=nil)
+  def self.authenticate(provider, email, uid, signed_in_resource=nil, username: nil)
     if auth = Authentication.where(:provider => provider.to_s, :uid => uid.to_s).first
       User.find(auth.user_id)
     elsif user = User.where(:email => email).first
@@ -36,6 +36,7 @@ class User < ActiveRecord::Base
       # New user
       user = User.new(:email => email)
       user.password = Devise.friendly_token[0,20]
+      user.username = username
       user.save!
 
       auth = Authentication.new
