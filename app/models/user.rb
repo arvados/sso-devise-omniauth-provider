@@ -9,7 +9,7 @@ class User < ActiveRecord::Base
 
   before_validation :initialize_fields, :on => :create
 
-  devise :token_authenticatable, :database_authenticatable
+  devise :token_authenticatable, :database_authenticatable, :timeoutable
   if CfiOauthProvider::Application.config.allow_account_registration
     devise :registerable
     if CfiOauthProvider::Application.config.require_email_confirmation

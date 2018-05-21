@@ -1,5 +1,5 @@
 <% content_for :page_title do %>
-  Please sign in to <%= Rails.application.config.site_title %>
+  Please use <%= CfiOauthProvider::Application.config.use_ldap["title"] %> to sign into <%= Rails.application.config.site_title %>
 <% end %>
 
 <% if params[:alert] %>
