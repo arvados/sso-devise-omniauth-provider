@@ -28,25 +28,23 @@ class User < ActiveRecord::Base
 
   def self.authenticate(provider, email, uid, signed_in_resource=nil, username: nil)
     if auth = Authentication.where(:provider => provider.to_s, :uid => uid.to_s).first
-      User.find(auth.user_id)
+      return User.find(auth.user_id)
     elsif user = User.where(:email => email).first
-      # User record exists, but don't have any information for this provider
-      raise EmailCollision.new
+      # User record exists, but don't have any information for this provider, yet.
     else
       # New user
       user = User.new(:email => email)
       user.password = Devise.friendly_token[0,20]
       user.username = username
       user.save!
-
-      auth = Authentication.new
-      auth.user_id = user.id
-      auth.provider = provider
-      auth.uid = uid
-      auth.save!
-
-      user
     end
+    auth = Authentication.new
+    auth.user_id = user.id
+    auth.provider = provider
+    auth.uid = uid
+    auth.save!
+
+    user
   end
 
   self.token_authentication_key = "oauth_token"
