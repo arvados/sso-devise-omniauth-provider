@@ -6,10 +6,13 @@
   :google_oauth2 => "Google account" } %>
 
 <% User.omniauth_providers.each do |prov| %>
+<% if prov == :local -%>
+<p>
+  <%= link_to "Local database", "/users/sign_in?auth_provider=local", class: "btn btn-default btn-block" %>
+</p>
+<% else -%>
 <p>
   <%= link_to title[prov], "/users/auth/#{prov}", class: "btn btn-default btn-block" %>
 </p>
 <% end %>
-<p>
-  <%= link_to "Local database", "/users/sign_in?auth_provider=local", class: "btn btn-default btn-block" %>
-</p>
+<% end %>

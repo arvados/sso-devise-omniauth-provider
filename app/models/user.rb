@@ -18,6 +18,7 @@ class User < ActiveRecord::Base
   end
 
   providers = []
+  providers << :local if CfiOauthProvider::Application.config.allow_account_registration
   providers << :ldap if CfiOauthProvider::Application.config.use_ldap
   providers << :google if CfiOauthProvider::Application.config.google_deprecated_openid
   providers << :google_oauth2 if CfiOauthProvider::Application.config.google_oauth2_client_id
@@ -26,19 +27,16 @@ class User < ActiveRecord::Base
 
   attr_accessible :email, :password, :password_confirmation, :remember_me, :first_name, :last_name
 
+  # Executed after callback from external authentication source,
+  # not for locally authenticated users
   def self.authenticate(provider, email, uid, signed_in_resource=nil, username: nil)
     if auth = Authentication.where(:provider => provider.to_s, :uid => uid.to_s).first
       User.find(auth.user_id)
-    elsif user = User.where(:email => email).first
-      # User record exists, but don't have any information for this provider
-      raise EmailCollision.new
     else
-      # New user
+      # No match, create a new user and authentication object
       user = User.new(:email => email)
-      user.password = Devise.friendly_token[0,20]
       user.username = username
       user.save!
-
       auth = Authentication.new
       auth.user_id = user.id
       auth.provider = provider
