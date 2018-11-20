@@ -27,25 +27,24 @@ class User < ActiveRecord::Base
 
   attr_accessible :email, :password, :password_confirmation, :remember_me, :first_name, :last_name
 
+  # Executed after callback from external authentication source,
+  # not for locally authenticated users
   def self.authenticate(provider, email, uid, signed_in_resource=nil, username: nil)
     if auth = Authentication.where(:provider => provider.to_s, :uid => uid.to_s).first
-      return User.find(auth.user_id)
-    elsif user = User.where(:email => email).first
-      # User record exists, but don't have any information for this provider, yet.
+      User.find(auth.user_id)
     else
-      # New user
+      # No match, create a new user and authentication object
       user = User.new(:email => email)
-      user.password = Devise.friendly_token[0,20]
       user.username = username
       user.save!
-    end
-    auth = Authentication.new
-    auth.user_id = user.id
-    auth.provider = provider
-    auth.uid = uid
-    auth.save!
+      auth = Authentication.new
+      auth.user_id = user.id
+      auth.provider = provider
+      auth.uid = uid
+      auth.save!
 
-    user
+      user
+    end
   end
 
   self.token_authentication_key = "oauth_token"
