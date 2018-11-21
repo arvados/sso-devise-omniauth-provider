@@ -28,7 +28,11 @@ CfiOauthProvider::Application.configure do
   # In production, Apache or nginx will already do this
   config.serve_static_assets = false
   config.assets.compress = true
-  config.assets.compile = true
+
+  # Disable Sprockets server because CVE-2018-3760
+  # See: https://github.com/rails/sprockets/commit/18b8a7f07a50c245e9aee7854ecdbe606bbd8bb5
+  config.assets.compile = false
+
   config.assets.digest = true
   # Enable serving of images, stylesheets, and javascripts from an asset server
   # config.action_controller.asset_host = "http://assets.example.com"
