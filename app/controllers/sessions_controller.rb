@@ -3,7 +3,7 @@ class SessionsController < Devise::SessionsController
     resource = build_resource
     clean_up_passwords(resource)
 
-    if User.omniauth_providers.empty? || params[:auth_provider] == "local"
+    if User.omniauth_providers == [:local] || params[:auth_provider] == "local"
       respond_with(resource, serialize_options(resource))
     else
       if session[:auth_provider]
