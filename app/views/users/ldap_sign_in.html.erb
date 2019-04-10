@@ -10,8 +10,13 @@
 
 <%= form_tag('/users/auth/ldap/callback') do |f| %>
   <div class="form-group">
+<% if (! CfiOauthProvider::Application.config.use_ldap.key?("username_is_email_address") || CfiOauthProvider::Application.config.use_ldap["username_is_email_address"]) -%>
     <p><%= label_tag :email %><br />
       <%= email_field_tag :username, nil, size: 30 %></p>
+<% else -%>
+    <p><%= label_tag :username %><br />
+      <%= text_field_tag :username, nil, size: 30 %></p>
+<% end -%>
   </div>
 
   <div class="form-group">
