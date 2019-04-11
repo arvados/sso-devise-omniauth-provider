@@ -72,6 +72,7 @@ common:
   #   base: "ou=Users, dc=example, dc=com"
   #   uid: uid
   #   email_domain: example.com
+  #   username_is_email_address: True
   #   #bind_dn: "some_user"
   #   #password: "some_password"
   use_ldap: false

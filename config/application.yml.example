@@ -72,6 +72,9 @@ common:
   # posix-compatible username (which may be different from the username part of
   # the email address.)
   #
+  # If 'username_is_email_address' is set to 'False', then the LDAP username
+  # provided will not be validated as an e-mail address. Default is 'True'.
+  #
   # Provide 'bind_dn' and 'password' if your LDAP server requires
   # a login before authenticating a user.
   #
@@ -83,6 +86,7 @@ common:
   #   base: "ou=Users, dc=example, dc=com"
   #   uid: uid
   #   username: uid
+  #   username_is_email_address: True
   #   #email_domain: example.com
   #   #bind_dn: "some_user"
   #   #password: "some_password"
