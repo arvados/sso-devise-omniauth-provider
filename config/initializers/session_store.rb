@@ -1,6 +1,6 @@
 # Be sure to restart your server when you modify this file.
 
-CfiOauthProvider::Application.config.session_store :cookie_store, :key => '_oauth-provider-demo_session'
+CfiOauthProvider::Application.config.session_store :cookie_store, {:key => '_oauth-provider-demo_session', expire_after: 1.minute}
 
 # Use the database for sessions instead of the cookie-based default,
 # which shouldn't be used to store highly confidential information
