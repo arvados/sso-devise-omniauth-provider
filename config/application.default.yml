@@ -47,6 +47,7 @@ common:
   # and https://developers.google.com/accounts/docs/OAuth2
   google_oauth2_client_id: false
   google_oauth2_client_secret: false
+  get_username_from_domain: false
 
   # Set this to your OpenId 2.0 realm to enable migration from Google OpenId
   # 2.0 to Google OAuth2 OpenId Connect (Google will provide OpenId 2.0 user

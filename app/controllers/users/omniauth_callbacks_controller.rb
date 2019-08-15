@@ -1,34 +1,51 @@
 require 'jwt'
+require 'google/apis/people_v1'
+require 'json'
 
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
   skip_before_filter :verify_authenticity_token, :only => [:google, :google_oauth2]
 
   def google
-    begin
-      @user = User.authenticate(:google, request.env['omniauth.auth']['info']['email'],
-                                request.env['omniauth.auth']['uid'],
-                                current_user)
-      do_sign_in
-    rescue => e
-      logger.warn e.backtrace
-      @error = e
-      render 'failure', status: :forbidden
-    end
+    raise "Obsolete google openid not supported"
   end
 
   def google_oauth2
     begin
+      primary_email = ""
+      alternate_emails = []
+      username_domain = CfiOauthProvider::Application.config.get_username_from_domain
+      username = nil
+
+      people = Google::Apis::PeopleV1::PeopleServiceService.new
+      people.authorization = request.env['omniauth.auth']['credentials']['token']
+      p = people.get_person('people/me', person_fields: 'names,emailAddresses')
+      p.email_addresses.each do |e|
+        if username_domain
+          m = /^(.*)@#{username_domain}$/.match(e.value)
+          if m
+            username = m[1]
+          end
+        end
+
+        if e.metadata.primary
+          primary_email = e.value
+        else
+          alternate_emails << e.value
+        end
+      end
+
       begin
         @user = User.authenticate(:google_oauth2,
-                                  request.env['omniauth.auth']['info']['email'],
+                                  primary_email,
                                   request.env['omniauth.auth']['uid'],
-                                  current_user)
+                                  current_user,
+                                  username: username)
       rescue User::EmailCollision => e
         if openid_id = JWT.decode(request.env['omniauth.auth']['extra']['id_token']).payload[:openid_id]
           # Try OpenId
           @user = User.authenticate(:google,
-                                    request.env['omniauth.auth']['info']['email'],
+                                    primary_email,
                                     openid_id,
                                     current_user)
           # Create authentication record for OAuth2
@@ -41,6 +58,8 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
           raise
         end
       end
+
+      @user.alternate_emails = JSON.generate(alternate_emails)
 
       do_sign_in
     rescue => e

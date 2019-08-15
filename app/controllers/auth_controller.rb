@@ -37,6 +37,12 @@ class AuthController < ApplicationController
   end
 
   def user
+
+    alternate_emails = []
+    if current_user.alternate_emails
+      alternate_emails = JSON.parse(current_user.alternate_emails)
+    end
+
     hash = {
       :provider => 'josh_id',
       :id => current_user.uuid,
@@ -45,6 +51,7 @@ class AuthController < ApplicationController
          :first_name => current_user.first_name,
          :last_name  => current_user.last_name,
          :username => current_user.username,
+         :alternate_emails => alternate_emails,
 
          # If there is a legacy OpenId 2.0 identity, provide that in identity_url.
          # Otherwise, provide the newly allocated uuid for identity_url.

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20181119204800) do
+ActiveRecord::Schema.define(:version => 20190815152705) do
 
   create_table "access_grants", :force => true do |t|
     t.string   "code"
@@ -66,6 +66,7 @@ ActiveRecord::Schema.define(:version => 20181119204800) do
     t.datetime "confirmation_sent_at"
     t.string   "confirmation_token"
     t.string   "username"
+    t.text     "alternate_emails"
   end
 
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true

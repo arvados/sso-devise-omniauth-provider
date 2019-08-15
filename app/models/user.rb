@@ -20,7 +20,6 @@ class User < ActiveRecord::Base
   providers = []
   providers << :local if CfiOauthProvider::Application.config.allow_account_registration
   providers << :ldap if CfiOauthProvider::Application.config.use_ldap
-  providers << :google if CfiOauthProvider::Application.config.google_deprecated_openid
   providers << :google_oauth2 if CfiOauthProvider::Application.config.google_oauth2_client_id
 
   devise :omniauthable, :omniauth_providers => providers
