@@ -47,6 +47,12 @@ common:
   # and https://developers.google.com/accounts/docs/OAuth2
   google_oauth2_client_id: false
   google_oauth2_client_secret: false
+
+  # If set, the 'username' for a user will be taken from the alternate
+  # email address that has the specified domain.  For example, if
+  # Google reports the user has two addresses, robert@company.com and
+  # bob@username.com, then "get_username_from_domain: username.com"
+  # means the username should be "bob".
   get_username_from_domain: false
 
   # Set this to your OpenId 2.0 realm to enable migration from Google OpenId
