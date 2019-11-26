@@ -21,6 +21,10 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
       people.authorization = request.env['omniauth.auth']['credentials']['token']
       p = people.get_person('people/me', person_fields: 'names,emailAddresses')
       p.email_addresses.each do |e|
+        if not e.metadata.verified
+          next
+        end
+
         if username_domain
           m = /^(.*)@#{username_domain}$/.match(e.value)
           if m
