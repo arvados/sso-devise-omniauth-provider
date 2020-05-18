@@ -18,7 +18,7 @@ class AuthController < ApplicationController
     application = Client.authenticate(params[:client_id], params[:client_secret])
 
     if application.nil?
-      render :json => {:error => "Could not find application"}
+      render :json => {:error => "Could not authenticate application with client id: #{params[:client_id]}"}
       return
     end
 
