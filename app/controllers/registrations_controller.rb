@@ -16,7 +16,7 @@ class RegistrationsController < Devise::RegistrationsController
       return redirect_to link_accounts_url(user.id)
     end
 
-    if User.where("email = '#{@user.email}' and encrypted_password != ''").size > 0
+    if User.where(["email = ? and encrypted_password != ''", @user.email]).size > 0
       # There is another local user defined with this e-mail address, abort
       flash[:alert] = "That email address is already in use"
       redirect_to :new_user_registration
